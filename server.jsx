@@ -46,6 +46,7 @@ OrbitalHome = React.createClass({
 		if (currentStage == "stageThree" && stagePartType == "commandModule" || stagePartType !== "commandModule"){
 			RocketPartObject[currentStage][stagePartType] = e.currentTarget.id;
 		}
+		testVal = 0;
 		this.forceUpdate()
 		this.redraw();
 	},
@@ -134,15 +135,15 @@ OrbitalHome = React.createClass({
 
 	cmTable(){
 		var partsArray = Parts.find({"partType": "commandModule"}, {sort: {name: 1}}).fetch();
-		return partsArray.map((part) => <tr><td>{part.name}</td><td className="table-number">{part.mass}</td><td className="table-number">{part.diameter}</td><td className="table-number">{part.drag}</td><td></td><td></td><td className="table-button"><button id={part._id} onClick={this.clickPart}>Add {part.name}</button></td></tr>);
+		return partsArray.map((part) => <tr><td>{part.name}</td><td className="table-number">{part.mass}</td><td className="table-number">{part.diameter}</td><td className="table-number">{part.drag}</td><td></td><td></td><td className="table-button"><button id={part._id} onClick={this.clickPart}>Add</button></td></tr>);
 	},
 	ftTable(){
 		var partsArray = Parts.find({"partType": "fuelTank"}, {sort: {name: 1}}).fetch();
-		return partsArray.map((part) => <tr><td>{part.name}</td><td className="table-number">{part.dryMass}</td><td className="table-number">{part.fuelMass}</td><td className="table-number">{part.diameter}</td><td className="table-number">{part.drag}</td><td></td><td className="table-button"><button id={part._id} onClick={this.clickPart}>Add {part.name}</button></td></tr>);
+		return partsArray.map((part) => <tr><td>{part.name}</td><td className="table-number">{part.dryMass}</td><td className="table-number">{part.fuelMass}</td><td className="table-number">{part.diameter}</td><td className="table-number">{part.drag}</td><td></td><td className="table-button"><button id={part._id} onClick={this.clickPart}>Add</button></td></tr>);
 	},
 	reTable(){
 		var partsArray = Parts.find({"partType": "rocketEngine"}, {sort: {name: 1}}).fetch();
-		return partsArray.map((part) => <tr><td>{part.name}</td><td className="table-number">{part.mass}</td><td className="table-number">{part.thrust}</td><td className="table-number">{part.isp}</td><td className="table-number">{part.diameter}</td><td className="table-number">{part.drag}</td><td className="table-button"><button id={part._id} onClick={this.clickPart}>Add {part.name}</button></td></tr>);
+		return partsArray.map((part) => <tr><td>{part.name}</td><td className="table-number">{part.mass}</td><td className="table-number">{part.thrust}</td><td className="table-number">{part.isp}</td><td className="table-number">{part.diameter}</td><td className="table-number">{part.drag}</td><td className="table-button"><button id={part._id} onClick={this.clickPart}>Add</button></td></tr>);
 	},
 	
 	render(){
