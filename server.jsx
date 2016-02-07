@@ -46,7 +46,7 @@ OrbitalHome = React.createClass({
 		if (currentStage == "stageThree" && stagePartType == "commandModule" || stagePartType !== "commandModule"){
 			RocketPartObject[currentStage][stagePartType] = e.currentTarget.id;
 		}
-
+		this.forceUpdate()
 		this.redraw();
 	},
 
@@ -116,7 +116,20 @@ OrbitalHome = React.createClass({
 	},
 
 	stageParts(stage){
-		return ""
+		var stageCommandModule = "";
+		var stageFuelTank = "";
+		var stageRocketEngine = "";
+		if (stage.commandModule !== undefined && stage.commandModule !== ""){
+			stageCommandModule = Parts.find({_id : stage.commandModule}).fetch()[0].name;
+		}
+		if (stage.fuelTank !== undefined && stage.fuelTank !== ""){
+			stageFuelTank = Parts.find({_id : stage.fuelTank}).fetch()[0].name;
+		}
+		if (stage.rocketEngine !== undefined && stage.rocketEngine !== ""){
+			stageRocketEngine = Parts.find({_id : stage.rocketEngine}).fetch()[0].name;
+		}
+
+		return <table><tr><td>{stageCommandModule}</td><td>{stageFuelTank}</td><td>{stageRocketEngine}</td></tr></table>
 	},
 
 	cmTable(){
@@ -146,8 +159,11 @@ OrbitalHome = React.createClass({
 								<th className="table-number"></th>
 								<th className="table-button">include</th>
 							</tr>
+						</table>
+						<table className="part-table">
 								{this.cmTable(this.data.parts)}
 						</table>
+						
 						<table>
 							<tr>
 								<th>name</th>
@@ -158,6 +174,8 @@ OrbitalHome = React.createClass({
 								<th className="table-number"></th>
 								<th className="table-button">include</th>
 							</tr>
+						</table>
+						<table className="part-table">
 								{this.ftTable(this.data.parts)}
 						</table>
 						<table>
@@ -170,24 +188,26 @@ OrbitalHome = React.createClass({
 								<th className="table-number">drag</th>
 								<th className="table-button">include</th>
 							</tr>
+							</table>
+						<table className="part-table">
 								{this.reTable(this.data.parts)}
 						</table>
 				</div>
 				<div id="right-col">
 					<span>
 					<button id="stage-3" onClick={this.clickStage}>Stage 3</button><br/>
-					<p>{this.stageParts()}</p><br/>
+					<p>{this.stageParts(RocketPartObject.stageThree)}</p><br/>
 					<button id="stage-2" onClick={this.clickStage}>Stage 2</button><br/>
-					<p>{this.stageParts()}</p><br/>
+					<p>{this.stageParts(RocketPartObject.stageTwo)}</p><br/>
 					<button id="stage-1" onClick={this.clickStage}>Stage 1</button><br/>
-					<p>{this.stageParts()}</p><br/>
+					<p>{this.stageParts(RocketPartObject.stageOne)}</p><br/>
 					<button id="launch" onClick={this.clickConfigure}>Configure and Launch Rocket </button><br/>
 					<p></p><br/>
 					<button id="clear" onClick={this.clickClear}>Clear Rocket</button><br/>
 					<table>
 						<tr>
 							<th>Status</th>
-							<th>Max Hieght</th>
+							<th>Max Height</th>
 						</tr>
 					{this.configuredRocket()}
 					</table>
