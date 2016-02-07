@@ -3,10 +3,21 @@ Parts = new Mongo.Collection("parts");
 var testVal = 0;
 var currentStage = "";
 var RocketPartObject = {
-	stageOne: {commandModule: "",fuelTank: "",rocketEngine: ""},
+	stageThree: {commandModule: "",fuelTank: "",rocketEngine: ""},
 	stageTwo: {fuelTank: "",rocketEngine: ""},
-	stageThree: {fuelTank: "",rocketEngine: ""}
+	stageOne: {fuelTank: "",rocketEngine: ""}
 }
+
+var Planet = {
+    name: "Earth",
+    sgp: 3.986e14,
+    radius: 6.371e6,
+    pressure: 1,
+    atmScale: 7,
+    atmHeight: 1.4e5,
+    atmWeight: 28.97,
+    dayLength: 86400
+};
 
 OrbitalHome = React.createClass({
 
@@ -22,17 +33,17 @@ OrbitalHome = React.createClass({
 		var stagePartType = Parts.find({_id: e.currentTarget.id}).fetch()[0].partType;
 
 		switch (Session.get('selectedStage')){
-			case "stage-1":
-					currentStage = "stageOne";
+			case "stage-3":
+					currentStage = "stageThree";
 				break;
 			case "stage-2":
 					currentStage = "stageTwo";
 				break;
-			case "stage-3":
-					currentStage = "stageThree";
+			case "stage-1":
+					currentStage = "stageOne";
 				break;	
 		}
-		if (currentStage == "stageOne" && stagePartType == "commandModule" || stagePartType !== "commandModule"){
+		if (currentStage == "stageThree" && stagePartType == "commandModule" || stagePartType !== "commandModule"){
 			RocketPartObject[currentStage][stagePartType] = e.currentTarget.id;
 		}
 
@@ -40,9 +51,9 @@ OrbitalHome = React.createClass({
 	},
 
 	clickStage(e){
-		$("#stage-1").removeClass('green');
+		$("#stage-3").removeClass('green');
 		$("#stage-2").removeClass('green');
-		$("#stage-3").removeClass('green');	
+		$("#stage-1").removeClass('green');	
 		Session.set('selectedStage', e.currentTarget.id);
 		$(("#" + e.currentTarget.id)).addClass('green');
 		this.redraw();
@@ -56,18 +67,22 @@ OrbitalHome = React.createClass({
 
 	configuredRocket(){
 		if (testVal === 0){
-			var what = "Rocket not configured";
+			var orbit = "Rocket not configured";
 		} else {
-			what = configureRocket(RocketPartObject);
+			Rocket = configureRocket(RocketPartObject);
+			orbit = orbitBody(Planet, Rocket, 150000);
+			var out1 = orbit[0][1];
+			var out2 = Math.round(orbit[2] - 6371000);
+
 		}
-		return <td>{what}</td>
+		return <tr><td>{out1}</td><td>{out2}</td></tr>
 	},
 
 	clickClear(){
 		RocketPartObject = {
-			stageOne: {commandModule: "",fuelTank: "",rocketEngine: ""},
+			stageThree: {commandModule: "",fuelTank: "",rocketEngine: ""},
 			stageTwo: {fuelTank: "",rocketEngine: ""},
-			stageThree: {fuelTank: "",rocketEngine: ""}
+			stageOne: {fuelTank: "",rocketEngine: ""}
 			}
 		testVal = 0;
 		this.forceUpdate()
@@ -76,14 +91,14 @@ OrbitalHome = React.createClass({
 
 	redraw(){
 		switch (Session.get('selectedStage')){
-			case "stage-1":
-					currentStage = "stageOne";
+			case "stage-3":
+					currentStage = "stageThree";
 				break;
 			case "stage-2":
 					currentStage = "stageTwo";
 				break;
-			case "stage-3":
-					currentStage = "stageThree";
+			case "stage-1":
+					currentStage = "stageOne";
 				break;	
 		}
 		var currentStageParts = [RocketPartObject[currentStage].commandModule, RocketPartObject[currentStage].fuelTank, RocketPartObject[currentStage].rocketEngine];
@@ -131,8 +146,8 @@ OrbitalHome = React.createClass({
 						<table>
 							<tr>
 								<th>name</th>
-								<th>mass dry</th>
-								<th>fuel dry</th>
+								<th>dry mass</th>
+								<th>fuel mass</th>
 								<th>diameter</th>
 								<th>drag</th>
 							</tr>
@@ -152,21 +167,19 @@ OrbitalHome = React.createClass({
 				</div>
 				<div id="right-col">
 					<span>
-					<button id="stage-1" onClick={this.clickStage}>Stage 1</button><br/>
+					<button id="stage-3" onClick={this.clickStage}>Stage 3</button><br/>
 					<p>{this.stageParts()}</p><br/>
 					<button id="stage-2" onClick={this.clickStage}>Stage 2</button><br/>
 					<p>{this.stageParts()}</p><br/>
-					<button id="stage-3" onClick={this.clickStage}>Stage 3</button><br/>
+					<button id="stage-1" onClick={this.clickStage}>Stage 1</button><br/>
 					<p>{this.stageParts()}</p><br/>
-					<button id="launch" onClick={this.clickConfigure}>Configure Rocket </button><br/>
+					<button id="launch" onClick={this.clickConfigure}>Configure and Launch Rocket </button><br/>
 					<p></p><br/>
 					<button id="clear" onClick={this.clickClear}>Clear Rocket</button><br/>
 					<table>
 						<tr>
-							<th>stage</th>
-							<th>TWR</th>
-							<th>deltaV</th>
-							<th>cD</th>
+							<th>Status</th>
+							<th>Max Hieght</th>
 						</tr>
 					{this.configuredRocket()}
 					</table>

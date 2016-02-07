@@ -1,9 +1,11 @@
 orbitBody = function(Planet, Rocket, orbit){ //, theta, phi
+
     //set constant, variable theta/phi could be implemented in future build
     var theta = 0;
     var phi = Math.PI / 2;
     var hvelScale = 0.90;
-    
+    var maxHeight = 0;
+
     //initialize variables
     var t = 0;
     var dt = 0;
@@ -14,25 +16,24 @@ orbitBody = function(Planet, Rocket, orbit){ //, theta, phi
     var error = "";
     var dvRequired = 0;
     var stageDv = 0;
-    
+
     var standardGravity = 9.80665;
-    
+
     var time = [0];
     var heading = [];
     var acceleration = [[0,0,0]]; //[d2r/dr2, d2theta/dt2, d2phi/dt2]
     var velocity = [[0,0,0]]; //[dr/dt, dtheta/dt, dphi/dt]
     var position = [[0,0,0]]; //[r, theta, phi]
     var positionAddLast = [0, Math.sin(phi) * 2 * Math.PI / Planet.dayLength, 0];
-    
+
     //intial values
     velocity[0] = [0, Planet.radius * Math.sin(phi) * 2 * Math.PI / Planet.dayLength, 0];
     position[0] = [Planet.radius, theta, phi];
 
     //set current stage to first rocket stage
     var currentStage = Rocket.stages[Rocket.stageCount];
-    
-    for (var t = 0; t < tMax; t++){
 
+    for (var t = 0; t < tMax; t++){
         //check to see if rocket falls into planet, will happen if twr is insufficient
         if(position[t][0] < Planet.radius){
             stopFlag = 1;
@@ -140,7 +141,7 @@ orbitBody = function(Planet, Rocket, orbit){ //, theta, phi
         var positionAdd = [velocity[t + 1][0], velocity[t + 1][1] / position[t][0], velocity[t + 1][2] / position[t][0]];
 
         var positionAddAve = arrayMul(arrayAdd(positionAdd, positionAddLast), 0.5);
-        
+
         position[t + 1] = arrayAdd(position[t], arrayMul(positionAddAve, dt)); 
 
         positionAddLast = positionAdd;
@@ -194,18 +195,22 @@ orbitBody = function(Planet, Rocket, orbit){ //, theta, phi
             }
             stopFlag = 1;
         }
-        
+        if (position[t][0] > maxHeight){
+            maxHieght = position[t][0];
+        }
+
         if (stopFlag == 1){
             break;
         }
         
         //if (t % 1 ==0){
-            console.log(t , time[t], Math.round(position[t][0]) - 6371000, position[t][1] * 6371000,Math.round(apoapsis - 6371000), Math.round(acceleration[t][0]*1000)/1000,  Math.round(acceleration[t][1]*1000)/1000, Math.round(velocity[t][0]), Math.round(velocity[t][1]), heading[0], dt, stageBurnRate, currentStage[0][0]);
+            //console.log(t , time[t], Math.round(position[t][0]) - 6371000, position[t][1] * 6371000,Math.round(apoapsis - 6371000), Math.round(acceleration[t][0]*1000)/1000,  Math.round(acceleration[t][1]*1000)/1000, Math.round(velocity[t][0]), Math.round(velocity[t][1]), heading[0], dt, stageBurnRate, currentStage[0][0]);
             //console.log(heading[0],  Math.round(position[t][0]) - 6371000,Math.round(apoapsis - 6371000));
         //}
     }
 
-    return [error, Rocket, dvRequired, stageDv, position, velocity, acceleration];
+    //return [error, Rocket, dvRequired, stageDv, position, velocity, acceleration];
+    return [error, Rocket, maxHieght];
     
     //calculate orbital properties
     function orbitalPropertiesCalc(velocity, position){
