@@ -49,3 +49,8 @@ button{
    float:right;
    width:300px;
 }
+
+
+#chart{
+  float:left;
+}
