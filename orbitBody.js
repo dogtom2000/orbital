@@ -210,7 +210,7 @@ orbitBody = function(Planet, Rocket, orbit){ //, theta, phi
     }
 
     //return [error, Rocket, dvRequired, stageDv, position, velocity, acceleration];
-    return [error, Rocket, maxHieght];
+    return [error, Rocket, maxHieght, position];
     
     //calculate orbital properties
     function orbitalPropertiesCalc(velocity, position){

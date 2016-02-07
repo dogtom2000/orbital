@@ -71,6 +71,7 @@ OrbitalHome = React.createClass({
 		} else {
 			Rocket = configureRocket(RocketPartObject);
 			orbit = orbitBody(Planet, Rocket, 150000);
+			drawchart(orbit[3]);
 			var out1 = orbit[0][1];
 			var out2 = Math.round(orbit[2] - 6371000);
 
@@ -86,7 +87,8 @@ OrbitalHome = React.createClass({
 			}
 		testVal = 0;
 		this.forceUpdate()
-		this.redraw(); 
+		d3.select("#chart").selectAll("svg").remove();
+		this.redraw();
 	},
 
 	redraw(){
@@ -119,15 +121,15 @@ OrbitalHome = React.createClass({
 
 	cmTable(){
 		var partsArray = Parts.find({"partType": "commandModule"}, {sort: {name: 1}}).fetch();
-		return partsArray.map((part) => <tr><td>{part.name}</td><td>{part.mass}</td><td>{part.diameter}</td><td>{part.drag}</td><td><button id={part._id} onClick={this.clickPart}>Add {part.name}</button></td></tr>);
+		return partsArray.map((part) => <tr><td>{part.name}</td><td className="table-number">{part.mass}</td><td className="table-number">{part.diameter}</td><td className="table-number">{part.drag}</td><td></td><td></td><td className="table-button"><button id={part._id} onClick={this.clickPart}>Add {part.name}</button></td></tr>);
 	},
 	ftTable(){
 		var partsArray = Parts.find({"partType": "fuelTank"}, {sort: {name: 1}}).fetch();
-		return partsArray.map((part) => <tr><td>{part.name}</td><td>{part.dryMass}</td><td>{part.fuelMass}</td><td>{part.diameter}</td><td>{part.drag}</td><td><button id={part._id} onClick={this.clickPart}>Add {part.name}</button></td></tr>);
+		return partsArray.map((part) => <tr><td>{part.name}</td><td className="table-number">{part.dryMass}</td><td className="table-number">{part.fuelMass}</td><td className="table-number">{part.diameter}</td><td className="table-number">{part.drag}</td><td></td><td className="table-button"><button id={part._id} onClick={this.clickPart}>Add {part.name}</button></td></tr>);
 	},
 	reTable(){
 		var partsArray = Parts.find({"partType": "rocketEngine"}, {sort: {name: 1}}).fetch();
-		return partsArray.map((part) => <tr><td>{part.name}</td><td>{part.mass}</td><td>{part.thrust}</td><td>{part.isp}</td><td>{part.diameter}</td><td>{part.drag}</td><td><button id={part._id} onClick={this.clickPart}>Add {part.name}</button></td></tr>);
+		return partsArray.map((part) => <tr><td>{part.name}</td><td className="table-number">{part.mass}</td><td className="table-number">{part.thrust}</td><td className="table-number">{part.isp}</td><td className="table-number">{part.diameter}</td><td className="table-number">{part.drag}</td><td className="table-button"><button id={part._id} onClick={this.clickPart}>Add {part.name}</button></td></tr>);
 	},
 	
 	render(){
@@ -137,30 +139,36 @@ OrbitalHome = React.createClass({
 						<table>
 							<tr>
 								<th>name</th>
-								<th>mass</th>
-								<th>diameter</th>
-								<th>drag</th>
+								<th className="table-number">mass</th>
+								<th className="table-number">diameter</th>
+								<th className="table-number">drag</th>
+								<th className="table-number"></th>
+								<th className="table-number"></th>
+								<th className="table-button">include</th>
 							</tr>
 								{this.cmTable(this.data.parts)}
 						</table>
 						<table>
 							<tr>
 								<th>name</th>
-								<th>dry mass</th>
-								<th>fuel mass</th>
-								<th>diameter</th>
-								<th>drag</th>
+								<th className="table-number">dry mass</th>
+								<th className="table-number">fuel mass</th>
+								<th className="table-number">diameter</th>
+								<th className="table-number">drag</th>
+								<th className="table-number"></th>
+								<th className="table-button">include</th>
 							</tr>
 								{this.ftTable(this.data.parts)}
 						</table>
 						<table>
 							<tr>
 								<th>name</th>
-								<th>mass</th>
-								<th>thrust</th>
-								<th>isp</th>
-								<th>diameter</th>
-								<th>drag</th>
+								<th className="table-number">mass</th>
+								<th className="table-number">thrust</th>
+								<th className="table-number">isp</th>
+								<th className="table-number">diameter</th>
+								<th className="table-number">drag</th>
+								<th className="table-button">include</th>
 							</tr>
 								{this.reTable(this.data.parts)}
 						</table>

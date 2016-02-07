@@ -6,9 +6,44 @@
 	background-color: green;
 }
 
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    margin-bottom: 5px;
+
+}
+
+th, td {
+	font-family: helvetica, monospace;
+    text-align: left;
+    border: 1px solid black;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+    width: 80px;
+}
+
+.table-number{
+	text-align: right;
+}
+
+.table-button{
+    text-align: center;
+}
+
+button{
+	width: 80px; 
+
+}
+
 #left-col {
    float:left;
-   width:600px;
 }
 #right-col {
    float:right;
