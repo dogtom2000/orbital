@@ -1,3 +1,16 @@
 .yellow{
 	background-color: yellow;
 }
+
+.green{
+	background-color: green;
+}
+
+#left-col {
+   float:left;
+   width:600px;
+}
+#right-col {
+   float:right;
+   width:300px;
+}
